@@ -12,7 +12,7 @@ export function CollapsibleSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItems = [
-    { href: '/', label: 'Beranda', icon: Home },
+    { href: '/dashboard', label: 'Beranda', icon: Home },
     { href: '/assistant', label: 'AI Assistant', icon: Sparkles },
     { href: '/misi', label: 'Misi', icon: Target },
     { href: '/keuangan', label: 'Keuangan', icon: Wallet },
@@ -80,16 +80,22 @@ export function CollapsibleSidebar() {
           onClick={() => setIsCollapsed(!isCollapsed)}
           variant="ghost"
           size="sm"
-          className={cn('w-full', isCollapsed && 'px-0')}
+          className={cn('w-full justify-start', isCollapsed && 'justify-center px-0')}
         >
-          {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5 mr-2" />}
-          {!isCollapsed && 'Sembunyikan'}
+          {isCollapsed ? (
+            <Menu className="w-5 h-5" />
+          ) : (
+            <>
+              <Menu className="w-5 h-5 mr-2" />
+              <span>Sembunyikan</span>
+            </>
+          )}
         </Button>
       </div>
 
       {!isCollapsed && (
         <div className="p-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500 text-center">TLATEN v1.0 - Dibuat dengan</p>
+          <p className="text-xs text-gray-500 text-center">TLATEN v1.0</p>
         </div>
       )}
     </aside>
