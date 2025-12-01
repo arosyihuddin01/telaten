@@ -108,129 +108,120 @@ export default function OnboardingPage() {
             </div>
 
             <Card className="shadow-xl border-2 border-pink-100">
-              <CardContent className="p-6">
+              <CardContent className="p-6 md:p-8">
                 {step === 1 && (
                   <div className="space-y-6">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center">
-                        <Store className="w-8 h-8 text-pink-600" />
+                    <div className="text-center mb-8">
+                      <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Store className="w-10 h-10 text-pink-600" />
                       </div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2">Apa nama usaha Anda?</h2>
+                      <p className="text-gray-600 text-sm">Nama ini akan muncul di dashboard Anda</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="businessName" className="text-base">
-                        Apa nama usaha Anda?
-                      </Label>
+                    <div className="space-y-4">
                       <Input
-                        id="businessName"
                         type="text"
                         placeholder="Contoh: Warung Siti"
                         value={formData.businessName}
                         onChange={(e) =>
                           setFormData({ ...formData, businessName: e.target.value })
                         }
-                        className="h-14 text-base"
+                        className="h-16 text-lg text-center font-medium border-2 border-gray-200 focus:border-pink-500 rounded-xl"
                         autoFocus
                       />
-                      <p className="text-sm text-gray-500">
-                        Nama ini akan muncul di dashboard Anda
-                      </p>
+                      <p className="text-xs text-gray-500 text-center">Ketik nama usaha Anda di atas</p>
                     </div>
                   </div>
                 )}
 
                 {step === 2 && (
                   <div className="space-y-6">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-cyan-100 rounded-full flex items-center justify-center">
-                        <Package className="w-8 h-8 text-purple-600" />
+                    <div className="text-center mb-8">
+                      <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-cyan-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Package className="w-10 h-10 text-purple-600" />
                       </div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2">Jenis usaha apa yang Anda jalankan?</h2>
+                      <p className="text-gray-600 text-sm">Pilih yang paling sesuai dengan bisnis Anda</p>
                     </div>
 
-                    <div className="space-y-4">
-                      <Label className="text-base">Jenis usaha apa yang Anda jalankan?</Label>
-                      <div className="grid grid-cols-2 gap-3">
-                        {businessTypes.map((type) => (
-                          <Button
-                            key={type}
-                            type="button"
-                            variant="outline"
-                            className={`h-14 text-base ${
-                              formData.businessType === type
-                                ? 'border-2 border-pink-500 bg-pink-50 text-pink-700'
-                                : 'border-gray-300 hover:border-pink-300'
-                            }`}
-                            onClick={() => setFormData({ ...formData, businessType: type })}
-                          >
-                            {type}
-                          </Button>
-                        ))}
-                      </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {businessTypes.map((type) => (
+                        <Button
+                          key={type}
+                          type="button"
+                          variant="outline"
+                          className={`h-16 text-base font-medium border-2 rounded-xl transition-all ${
+                            formData.businessType === type
+                              ? 'border-pink-500 bg-pink-50 text-pink-700 shadow-lg transform scale-105'
+                              : 'border-gray-300 hover:border-pink-300 hover:bg-pink-25'
+                          }`}
+                          onClick={() => setFormData({ ...formData, businessType: type })}
+                        >
+                          {type}
+                        </Button>
+                      ))}
                     </div>
                   </div>
                 )}
 
                 {step === 3 && (
                   <div className="space-y-6">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-100 to-pink-100 rounded-full flex items-center justify-center">
-                        <MapPin className="w-8 h-8 text-cyan-600" />
+                    <div className="text-center mb-8">
+                      <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <MapPin className="w-10 h-10 text-cyan-600" />
                       </div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2">Di mana lokasi usaha Anda?</h2>
+                      <p className="text-gray-600 text-sm">Bantu kami memahami area operasi Anda</p>
                     </div>
 
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="location" className="text-base">
-                          Di mana lokasi usaha Anda?
-                        </Label>
+                    <div className="space-y-6">
+                      <div className="space-y-3">
                         <Input
-                          id="location"
                           type="text"
-                          placeholder="Contoh: Jakarta Selatan"
+                          placeholder="Kota/Kabupaten"
                           value={formData.location}
                           onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                          className="h-14 text-base"
+                          className="h-16 text-lg text-center font-medium border-2 border-gray-200 focus:border-pink-500 rounded-xl"
                         />
+                        <p className="text-xs text-gray-500 text-center">Contoh: Jakarta Selatan</p>
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="mainProduct" className="text-base">
-                          Apa produk utama yang Anda jual?
-                        </Label>
+                      <div className="space-y-3">
                         <Input
-                          id="mainProduct"
                           type="text"
-                          placeholder="Contoh: Nasi goreng, Minuman"
+                          placeholder="Produk/jasa utama"
                           value={formData.mainProduct}
                           onChange={(e) =>
                             setFormData({ ...formData, mainProduct: e.target.value })
                           }
-                          className="h-14 text-base"
+                          className="h-16 text-lg text-center font-medium border-2 border-gray-200 focus:border-pink-500 rounded-xl"
                         />
+                        <p className="text-xs text-gray-500 text-center">Contoh: Nasi goreng, Minuman</p>
                       </div>
                     </div>
                   </div>
                 )}
 
-                <div className="flex gap-3 mt-8">
+                <div className="flex gap-4 mt-10">
                   {step > 1 && (
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setStep(step - 1)}
-                      className="h-12 px-6"
+                      className="h-14 px-8 text-base font-medium border-2 rounded-xl"
                     >
-                      <ChevronLeft className="w-5 h-5 mr-1" />
+                      <ChevronLeft className="w-5 h-5 mr-2" />
                       Kembali
                     </Button>
                   )}
                   <Button
                     type="button"
                     onClick={handleNext}
-                    className="flex-1 h-12 text-base font-semibold bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                    className="flex-1 h-14 text-lg font-semibold bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 shadow-lg rounded-xl"
                   >
                     {step === 3 ? 'Selesai' : 'Lanjut'}
-                    {step < 3 && <ChevronRight className="w-5 h-5 ml-1" />}
+                    {step < 3 && <ChevronRight className="w-5 h-5 ml-2" />}
                   </Button>
                 </div>
               </CardContent>
