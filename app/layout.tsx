@@ -16,6 +16,7 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const isAuthPage = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/onboarding' || pathname === '/';
+  const shouldShowBottomNav = !isAuthPage && pathname !== '/assistant';
   return (
     <html lang="id">
       <body className={inter.className}>
@@ -32,7 +33,7 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
-            <BottomNav />
+            {shouldShowBottomNav && <BottomNav />}
             <Toaster />
           </>
         )}

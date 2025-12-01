@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { mockUser, mockMissions } from '@/lib/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,19 +27,11 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 export default function ProfilPage() {
+  const router = useRouter();
   const { toast } = useToast();
   const [user] = useState(mockUser);
   const completedMissions = mockMissions.filter((m) => m.status === 'completed').length;
   const totalXP = user.xp;
-
-  const [businessInfo, setBusinessInfo] = useState({
-    name: user.businessName,
-    type: 'Warung Makan',
-    location: 'Jakarta Selatan',
-    mainProduct: 'Nasi goreng, Minuman',
-    description: 'Warung makan keluarga dengan cita rasa tradisional',
-  });
-  const [isBusinessDialogOpen, setIsBusinessDialogOpen] = useState(false);
 
   const achievements = [
     { id: 1, name: 'Pedagang Pemula', icon: Trophy, unlocked: true, description: 'Mendaftarkan usaha pertama' },
@@ -50,30 +42,16 @@ export default function ProfilPage() {
     { id: 6, name: 'Pengusaha Handal', icon: Store, unlocked: false, description: 'Mencapai level 10' },
   ];
 
-  const handleEditProfile = () => {
-    toast({
-      title: 'Edit Profil',
-      description: 'Fitur ini akan segera tersedia.',
-    });
-  };
-
   const handleBusinessInfo = () => {
-    setIsBusinessDialogOpen(true);
+    router.push('/edit-business');
   };
 
-  const handleSaveBusinessInfo = () => {
-    toast({
-      title: 'Informasi Usaha Disimpan',
-      description: 'Perubahan telah berhasil disimpan.',
-    });
-    setIsBusinessDialogOpen(false);
+  const handleEditProfile = () => {
+    router.push('/edit-profile');
   };
 
   const handleSettings = () => {
-    toast({
-      title: 'Pengaturan',
-      description: 'Anda dapat mengatur notifikasi dan preferensi di sini.',
-    });
+    router.push('/settings');
   };
 
   const handleHelp = () => {
@@ -181,89 +159,14 @@ export default function ProfilPage() {
 
           <Card>
             <CardContent className="p-0">
-              <Dialog open={isBusinessDialogOpen} onOpenChange={setIsBusinessDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    onClick={handleBusinessInfo}
-                    variant="ghost"
-                    className="w-full justify-start h-14 px-5 text-base"
-                  >
-                    <Store className="w-5 h-5 mr-3 text-gray-600" />
-                    Informasi Usaha
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                      <Store className="w-5 h-5" />
-                      Edit Informasi Usaha
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="businessName">Nama Usaha</Label>
-                      <Input
-                        id="businessName"
-                        value={businessInfo.name}
-                        onChange={(e) => setBusinessInfo({ ...businessInfo, name: e.target.value })}
-                        placeholder="Masukkan nama usaha"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="businessType">Jenis Usaha</Label>
-                      <Input
-                        id="businessType"
-                        value={businessInfo.type}
-                        onChange={(e) => setBusinessInfo({ ...businessInfo, type: e.target.value })}
-                        placeholder="Contoh: Warung Makan, Toko Kelontong"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Lokasi</Label>
-                      <Input
-                        id="location"
-                        value={businessInfo.location}
-                        onChange={(e) => setBusinessInfo({ ...businessInfo, location: e.target.value })}
-                        placeholder="Kota/Kabupaten"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="mainProduct">Produk Utama</Label>
-                      <Input
-                        id="mainProduct"
-                        value={businessInfo.mainProduct}
-                        onChange={(e) => setBusinessInfo({ ...businessInfo, mainProduct: e.target.value })}
-                        placeholder="Produk/jasa utama yang dijual"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Deskripsi</Label>
-                      <Textarea
-                        id="description"
-                        value={businessInfo.description}
-                        onChange={(e) => setBusinessInfo({ ...businessInfo, description: e.target.value })}
-                        placeholder="Deskripsikan usaha Anda"
-                        rows={3}
-                      />
-                    </div>
-                    <div className="flex gap-3 pt-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsBusinessDialogOpen(false)}
-                        className="flex-1"
-                      >
-                        Batal
-                      </Button>
-                      <Button
-                        onClick={handleSaveBusinessInfo}
-                        className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                      >
-                        Simpan
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Button
+                onClick={handleBusinessInfo}
+                variant="ghost"
+                className="w-full justify-start h-14 px-5 text-base"
+              >
+                <Store className="w-5 h-5 mr-3 text-gray-600" />
+                Informasi Usaha
+              </Button>
             </CardContent>
           </Card>
 
@@ -311,6 +214,8 @@ export default function ProfilPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Mobile-style Business Info Editor - REMOVED: Now uses separate page */}
       </div>
     </div>
   );
