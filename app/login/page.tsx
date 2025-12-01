@@ -27,7 +27,7 @@ export default function LoginPage() {
       description: 'Anda berhasil masuk.',
     });
 
-    router.push('/');
+    router.push('/dashboard');
   };
 
   return (
