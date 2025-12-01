@@ -6,6 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   User,
   Store,
@@ -16,6 +20,9 @@ import {
   LogOut,
   Crown,
   Sparkles,
+  Edit,
+  MapPin,
+  Package,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,10 +32,22 @@ export default function ProfilPage() {
   const completedMissions = mockMissions.filter((m) => m.status === 'completed').length;
   const totalXP = user.xp;
 
+  const [businessInfo, setBusinessInfo] = useState({
+    name: user.businessName,
+    type: 'Warung Makan',
+    location: 'Jakarta Selatan',
+    mainProduct: 'Nasi goreng, Minuman',
+    description: 'Warung makan keluarga dengan cita rasa tradisional',
+  });
+  const [isBusinessDialogOpen, setIsBusinessDialogOpen] = useState(false);
+
   const achievements = [
-    { id: 1, name: 'Pedagang Pemula', icon: Trophy, unlocked: true },
-    { id: 2, name: 'Rajin Mencatat', icon: Target, unlocked: false },
-    { id: 3, name: 'Master Keuangan', icon: Crown, unlocked: false },
+    { id: 1, name: 'Pedagang Pemula', icon: Trophy, unlocked: true, description: 'Mendaftarkan usaha pertama' },
+    { id: 2, name: 'Rajin Mencatat', icon: Target, unlocked: completedMissions >= 3, description: 'Menyelesaikan 3 misi pertama' },
+    { id: 3, name: 'Master Keuangan', icon: Crown, unlocked: totalXP >= 1000, description: 'Mengumpulkan 1000 XP' },
+    { id: 4, name: 'Bisnis Stabil', icon: Sparkles, unlocked: false, description: 'Beroperasi selama 30 hari' },
+    { id: 5, name: 'Pelanggan Setia', icon: User, unlocked: false, description: 'Mendapatkan 50 ulasan positif' },
+    { id: 6, name: 'Pengusaha Handal', icon: Store, unlocked: false, description: 'Mencapai level 10' },
   ];
 
   const handleEditProfile = () => {
@@ -36,6 +55,18 @@ export default function ProfilPage() {
       title: 'Edit Profil',
       description: 'Fitur ini akan segera tersedia.',
     });
+  };
+
+  const handleBusinessInfo = () => {
+    setIsBusinessDialogOpen(true);
+  };
+
+  const handleSaveBusinessInfo = () => {
+    toast({
+      title: 'Informasi Usaha Disimpan',
+      description: 'Perubahan telah berhasil disimpan.',
+    });
+    setIsBusinessDialogOpen(false);
   };
 
   const handleSettings = () => {
@@ -108,7 +139,7 @@ export default function ProfilPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {achievements.map((achievement) => {
                 const Icon = achievement.icon;
                 return (
@@ -125,7 +156,8 @@ export default function ProfilPage() {
                         achievement.unlocked ? 'text-yellow-600' : 'text-gray-400'
                       }`}
                     />
-                    <p className="text-xs font-medium text-gray-700">{achievement.name}</p>
+                    <p className="text-sm font-medium text-gray-700 mb-1">{achievement.name}</p>
+                    <p className="text-xs text-gray-500">{achievement.description}</p>
                   </div>
                 );
               })}
@@ -149,14 +181,89 @@ export default function ProfilPage() {
 
           <Card>
             <CardContent className="p-0">
-              <Button
-                onClick={handleEditProfile}
-                variant="ghost"
-                className="w-full justify-start h-14 px-5 text-base"
-              >
-                <Store className="w-5 h-5 mr-3 text-gray-600" />
-                Informasi Usaha
-              </Button>
+              <Dialog open={isBusinessDialogOpen} onOpenChange={setIsBusinessDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    onClick={handleBusinessInfo}
+                    variant="ghost"
+                    className="w-full justify-start h-14 px-5 text-base"
+                  >
+                    <Store className="w-5 h-5 mr-3 text-gray-600" />
+                    Informasi Usaha
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Store className="w-5 h-5" />
+                      Edit Informasi Usaha
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="businessName">Nama Usaha</Label>
+                      <Input
+                        id="businessName"
+                        value={businessInfo.name}
+                        onChange={(e) => setBusinessInfo({ ...businessInfo, name: e.target.value })}
+                        placeholder="Masukkan nama usaha"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="businessType">Jenis Usaha</Label>
+                      <Input
+                        id="businessType"
+                        value={businessInfo.type}
+                        onChange={(e) => setBusinessInfo({ ...businessInfo, type: e.target.value })}
+                        placeholder="Contoh: Warung Makan, Toko Kelontong"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Lokasi</Label>
+                      <Input
+                        id="location"
+                        value={businessInfo.location}
+                        onChange={(e) => setBusinessInfo({ ...businessInfo, location: e.target.value })}
+                        placeholder="Kota/Kabupaten"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="mainProduct">Produk Utama</Label>
+                      <Input
+                        id="mainProduct"
+                        value={businessInfo.mainProduct}
+                        onChange={(e) => setBusinessInfo({ ...businessInfo, mainProduct: e.target.value })}
+                        placeholder="Produk/jasa utama yang dijual"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Deskripsi</Label>
+                      <Textarea
+                        id="description"
+                        value={businessInfo.description}
+                        onChange={(e) => setBusinessInfo({ ...businessInfo, description: e.target.value })}
+                        placeholder="Deskripsikan usaha Anda"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsBusinessDialogOpen(false)}
+                        className="flex-1"
+                      >
+                        Batal
+                      </Button>
+                      <Button
+                        onClick={handleSaveBusinessInfo}
+                        className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                      >
+                        Simpan
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
 
